@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter
+} from '@angular/core';
 
 @Component({
   selector: 'app-cell',
@@ -8,11 +15,18 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter
 })
 export class CellComponent implements OnInit {
   @Input() active = false;
+  @Input() lost = false;
+  @Input() won = false;
+  @Input() cell = null;
   @Output() emitWon = new EventEmitter<boolean>();
-  won = false;
-  constructor() { }
 
-  ngOnInit() {
-  }
+  onWon = () => {
+    if (this.cell && !this.cell.lost && this.cell.active) {
+      this.won = true;
+      this.cell.won = true;
+    }
+  };
+  constructor() {}
 
+  ngOnInit() {}
 }

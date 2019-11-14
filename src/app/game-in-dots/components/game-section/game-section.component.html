@@ -1,9 +1,17 @@
 <section>
-  <div class="settings-bar"></div>
+  <div class="settings-bar">
+    <button (click)="startGame()">PLAY</button>
+  </div>
   <h2>Message here</h2>
   <div class="game-field">
-    <div class="row" *ngFor="let row of cells|flatTo2D">
-      <app-cell class="cell" *ngFor="let cell of row" [active]="cell.active"></app-cell>
+    <div class="row" *ngFor="let row of cells | flatTo2D">
+      <app-cell
+        class="cell"
+        *ngFor="let cell of row"
+        [active]="cell.active"
+        [lost]="cell.lost"
+        [cell]="cell"
+      ></app-cell>
     </div>
   </div>
 </section>

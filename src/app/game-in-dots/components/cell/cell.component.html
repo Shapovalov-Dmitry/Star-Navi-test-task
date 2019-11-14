@@ -1,6 +1,7 @@
 <div
   [ngStyle]="{
-    'background-color': won && 'red' || active && 'blue'
+    'background-color': lost && 'red' || won && 'green' || active && 'blue'
   }"
-  (click)="won = true"
+  (click)="onWon()"
+  (ngModelChange)="this.emitWon.emit()"
 ></div>
