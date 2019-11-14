@@ -1,15 +1,17 @@
 .game-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
   min-width: fit-content;
+  height: 100%;
+
+  align-items: center;
+  justify-content: center;
 
   & :nth-child(n) {
     border: solid black 1px;
-    height: 90%;
-    flex: 50% 1;
     padding: 1em;
+    height: 90%;
+
+    flex: 50% 1;
   }
 
   @media (max-width: 1100px) {
@@ -20,9 +22,9 @@
 
   @media (max-width: 900px) {
     & {
-      justify-content: initial;
       align-items: initial;
       flex-direction: column;
+      justify-content: initial;
     }
   }
 }

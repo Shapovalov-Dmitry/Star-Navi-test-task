@@ -1,1 +1,9 @@
-<p>game-section works!</p>
+<section>
+  <div class="settings-bar"></div>
+  <h2>Message here</h2>
+  <div class="game-field">
+    <div class="row" *ngFor="let row of cells|flatTo2D">
+      <app-cell class="cell" *ngFor="let cell of row" [active]="cell.active"></app-cell>
+    </div>
+  </div>
+</section>
