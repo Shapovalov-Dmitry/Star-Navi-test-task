@@ -1,6 +1,9 @@
 {
   "extends": "tslint:recommended",
   "rules": {
+    "variable-name": {
+      "options": ["check-format", "allow-leading-underscore"]
+    },
     "semicolon": [true, "always", "ignore-bound-class-methods"],
     "array-type": false,
     "arrow-parens": false,

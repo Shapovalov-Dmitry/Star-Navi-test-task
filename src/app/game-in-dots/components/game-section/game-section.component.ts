@@ -1,25 +1,43 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-
+import { ICell } from '../../../Models/cell';
 @Component({
   selector: 'app-game-section',
   templateUrl: './game-section.component.html',
   styleUrls: ['./game-section.component.scss']
 })
 export class GameSectionComponent implements OnInit, OnDestroy {
-  cells;
+  cells: ICell[];
   sideLength = 5;
   cellsQuantity = this.sideLength ** 2;
-  timeOut = 700;
-  timer: NodeJS.Timer;
+  timeOut = 100;
+  timer;
+  cell: () => ICell = () => ({ active: false, won: false, lost: false });
 
-  cell = () => ({ active: false, won: false, lost: false });
+  private _clearTimer = () => clearInterval(this.timer);
+  private _createCleanCells = () =>
+    (this.cells = Array.from(
+      { length: this.sideLength ** 2 },
+      el => (el = this.cell())
+    ));
 
   startGame = () => {
+    this._clearTimer();
+    this._createCleanCells();
+
     let previousRandomCell;
     let currentRandomCell;
+
+    const scoreThreshold = Math.ceil(this.cellsQuantity / 2);
+    let computerScore = 0;
+    let userScore = 0;
+
     this.timer = setInterval(() => {
-      const isCompleted = this.cells.map(el => el.active).includes(false);
-      while (isCompleted) {
+      const isCompleted = !this.cells.map(el => el.active).includes(false);
+      while (
+        !isCompleted &&
+        computerScore < scoreThreshold &&
+        userScore < scoreThreshold
+      ) {
         currentRandomCell = this.cells[
           Math.floor(Math.random() * this.cells.length)
         ];
@@ -27,9 +45,11 @@ export class GameSectionComponent implements OnInit, OnDestroy {
         if (!isAlreadyActive) {
           if (previousRandomCell && !previousRandomCell.won) {
             previousRandomCell.lost = true;
+            computerScore++;
           }
           currentRandomCell.active = true;
           previousRandomCell = currentRandomCell;
+          userScore++;
           break;
         }
       }
@@ -39,13 +59,10 @@ export class GameSectionComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    this.cells = Array.from(
-      { length: this.sideLength ** 2 },
-      el => (el = this.cell())
-    );
+    this._createCleanCells();
   }
 
   ngOnDestroy() {
-    clearInterval(this.timer);
+    this._clearTimer();
   }
 }
