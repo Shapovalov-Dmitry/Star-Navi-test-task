@@ -1,8 +1,8 @@
 <section>
   <div class="settings-bar">
-    <button (click)="startGame()">PLAY</button>
+    <button (click)="startGame()">{{ playButtonCaption }}</button>
   </div>
-  <h2>Message here</h2>
+  <h2>{{ message }}</h2>
   <div class="game-field">
     <div class="row" *ngFor="let row of cells | flatTo2D">
       <app-cell

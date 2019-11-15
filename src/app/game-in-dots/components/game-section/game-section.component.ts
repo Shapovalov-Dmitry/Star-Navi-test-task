@@ -9,34 +9,62 @@ export class GameSectionComponent implements OnInit, OnDestroy {
   cells: ICell[];
   sideLength = 5;
   cellsQuantity = this.sideLength ** 2;
-  timeOut = 100;
+  timeOut = 600;
   timer;
+  message = 'Press play to start the game';
+  playButtonCaption = 'PLAY';
+
+  scoreThreshold = Math.ceil(this.cellsQuantity / 2);
+
+  computerScore = 0;
+  userScore = 0;
+
   cell: () => ICell = () => ({ active: false, won: false, lost: false });
 
+  private _resetScore = () => {
+    this.computerScore = 0;
+    this.userScore = 0;
+  };
+  private _resetMessage = () => (this.message = '');
   private _clearTimer = () => clearInterval(this.timer);
   private _createCleanCells = () =>
     (this.cells = Array.from(
       { length: this.sideLength ** 2 },
       el => (el = this.cell())
     ));
+  private _showMessageWhoHadWon() {
+    if (this.computerScore === this.scoreThreshold) {
+      this.message = 'Computer wins!';
+    }
+    if (this.userScore === this.scoreThreshold) {
+      this.message = 'You win!';
+    }
+  }
+  private _showMessageWhilePlaying() {
+    this.message = 'Click the blue square as soon as it appears!';
+  }
+  private _changeButtonCaptionAfterFirstClick() {
+    this.playButtonCaption = 'PLAY AGAIN';
+  }
 
   startGame = () => {
+    this._resetMessage();
+    this._resetScore();
     this._clearTimer();
     this._createCleanCells();
 
+    this._changeButtonCaptionAfterFirstClick();
+    this._showMessageWhilePlaying();
+
     let previousRandomCell;
     let currentRandomCell;
-
-    const scoreThreshold = Math.ceil(this.cellsQuantity / 2);
-    let computerScore = 0;
-    let userScore = 0;
 
     this.timer = setInterval(() => {
       const isCompleted = !this.cells.map(el => el.active).includes(false);
       while (
         !isCompleted &&
-        computerScore < scoreThreshold &&
-        userScore < scoreThreshold
+        this.computerScore < this.scoreThreshold &&
+        this.userScore < this.scoreThreshold
       ) {
         currentRandomCell = this.cells[
           Math.floor(Math.random() * this.cells.length)
@@ -47,15 +75,17 @@ export class GameSectionComponent implements OnInit, OnDestroy {
         if (!isAlreadyActive) {
           if (previousRandomCell && !previousRandomCell.won) {
             previousRandomCell.lost = true;
-            computerScore++;
+            this.computerScore++;
           } else if (previousRandomCell && previousRandomCell.won) {
-            userScore++;
+            this.userScore++;
           }
           if (
-            scoreThreshold - userScore !== 0 &&
-            scoreThreshold - computerScore !== 0
+            this.scoreThreshold - this.userScore !== 0 &&
+            this.scoreThreshold - this.computerScore !== 0
           ) {
             currentRandomCell.active = true;
+          } else {
+            this._showMessageWhoHadWon();
           }
           previousRandomCell = currentRandomCell;
 
