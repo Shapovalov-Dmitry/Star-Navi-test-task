@@ -41,15 +41,24 @@ export class GameSectionComponent implements OnInit, OnDestroy {
         currentRandomCell = this.cells[
           Math.floor(Math.random() * this.cells.length)
         ];
+
         const isAlreadyActive = currentRandomCell.active;
+
         if (!isAlreadyActive) {
           if (previousRandomCell && !previousRandomCell.won) {
             previousRandomCell.lost = true;
             computerScore++;
+          } else if (previousRandomCell && previousRandomCell.won) {
+            userScore++;
           }
-          currentRandomCell.active = true;
+          if (
+            scoreThreshold - userScore !== 0 &&
+            scoreThreshold - computerScore !== 0
+          ) {
+            currentRandomCell.active = true;
+          }
           previousRandomCell = currentRandomCell;
-          userScore++;
+
           break;
         }
       }
