@@ -2,11 +2,11 @@
   <app-settings-bar
     [startGame]="startGame"
     [playButtonCaption]="playButtonCaption"
-    (name)="onNameChange($event)"
+    (playerName)="onPlayerNameChange($event)"
     (gameMode)="onGameModeChange($event)"
   ></app-settings-bar>
-  <h2>{{ message }}</h2>
-  <div class="game-field">
+  <h2>{{ chooseMessage() && message}}</h2>
+  <div *ngIf="cells" class="game-field">
     <div class="row" *ngFor="let row of cells | flatTo2D">
       <app-cell
         class="cell"

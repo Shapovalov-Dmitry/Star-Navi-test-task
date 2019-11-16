@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
   Input,
   Output,
@@ -16,24 +15,21 @@ import { Observable } from 'rxjs';
   styleUrls: ['./settings-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SettingsBarComponent implements OnInit {
+export class SettingsBarComponent {
   @Input() startGame: () => void;
   @Input() playButtonCaption: string;
-  @Output() name: EventEmitter<string> = new EventEmitter();
+  @Output() playerName: EventEmitter<string> = new EventEmitter();
   @Output() gameMode: EventEmitter<IGameMode> = new EventEmitter();
 
   gameModes$: Observable<GameModesList>;
-  selectedGameMode = 'placeholder';
 
   constructor(public gameDataService: GameDataService) {
     this.gameModes$ = gameDataService.getGameModes();
   }
 
-  ngOnInit() {}
+  onSelectGameMode = e => this.gameMode.emit(JSON.parse(e.target.value));
 
-  onSelectGameMode = () => {
-    this.gameMode.emit(JSON.parse(this.selectedGameMode));
-  };
+  onPlayerNameChange = e => this.playerName.emit(e.target.value);
 
   sortNull = () => {};
 }

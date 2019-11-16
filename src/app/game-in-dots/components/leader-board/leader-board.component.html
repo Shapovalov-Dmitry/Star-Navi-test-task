@@ -1,7 +1,7 @@
 <section>
   <h1>Leader board</h1>
 
-  <ul>
+  <ul *ngIf="getLeaders$ | async">
     <li *ngFor="let item of [1, 2, 3, 4]">
       <p>
         {{ item }}

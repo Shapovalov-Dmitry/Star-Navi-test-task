@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Input,
-  ChangeDetectorRef
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ICell } from '../../../Models/cell';
 import { IGameMode } from '../../../Models/gameMode';
 
@@ -14,67 +8,70 @@ import { IGameMode } from '../../../Models/gameMode';
   styleUrls: ['./game-section.component.scss']
 })
 export class GameSectionComponent implements OnInit, OnDestroy {
-  @Input()
+  sideLength;
+  cellsQuantity;
+  timeout: number;
   cells: ICell[];
-  sideLength = 5;
-  cellsQuantity = this.sideLength ** 2;
-  timeout = 600;
-  timer;
-  message = 'Press play to start the game';
+
+  message: string;
   playButtonCaption = 'PLAY';
   playerName: string;
 
-  scoreThreshold = Math.ceil(this.cellsQuantity / 2);
+  scoreThreshold;
 
   computerScore = 0;
-  userScore = 0;
+  playerScore = 0;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
-  cell: () => ICell = () => ({ active: false, won: false, lost: false });
+  timer;
 
-  private _resetScore = () => {
-    this.computerScore = 0;
-    this.userScore = 0;
-  };
-  private _resetMessage = () => (this.message = '');
-  private _clearTimer = () => clearInterval(this.timer);
-  private _createCleanCells = () =>
-    (this.cells = Array.from(
-      { length: this.sideLength ** 2 },
-      el => (el = this.cell())
-    ));
-  private _showMessageWhoHadWon() {
+  constructor() {}
+
+  ngOnInit() {
+    this._resetGame();
+  }
+
+  chooseMessage() {
+    if (this.timer) {
+      this.message = 'Click the blue square as soon as it appears!';
+    }
+    if (!this.cells.length) {
+      this.message = 'Pick game mode';
+    }
+    if (!this.playerName) {
+      this.message = 'Put in your name';
+    }
+    if (!this.cells.length && !this.playerName) {
+      this.message = 'Pick game mode and put in your name';
+    }
+    if (this.cells.length && this.playerName) {
+      this.message = 'Press play to start the game';
+    }
     if (this.computerScore === this.scoreThreshold) {
       this.message = 'Computer wins!';
     }
-    if (this.userScore === this.scoreThreshold) {
+    if (this.playerScore === this.scoreThreshold) {
       this.message = 'You win!';
     }
-  }
-  private _showMessageWhilePlaying() {
-    this.message = 'Click the blue square as soon as it appears!';
-  }
-  private _changeButtonCaptionAfterFirstClick() {
-    this.playButtonCaption = 'PLAY AGAIN';
+    return true;
   }
 
-  onNameChange = (e: string) => {
+  cell: () => ICell = () => ({ active: false, won: false, lost: false });
+
+  onPlayerNameChange = (e: string) => {
     this.playerName = e;
+    this._resetGame();
   };
+
   onGameModeChange = (e: IGameMode) => {
     this.timeout = e.delay;
     this.sideLength = e.field;
-    this._createCleanCells();
+    this._resetGame();
   };
 
   startGame = () => {
-    this._resetMessage();
-    this._resetScore();
-    this._clearTimer();
-    this._createCleanCells();
+    this._resetGame();
 
     this._changeButtonCaptionAfterFirstClick();
-    this._showMessageWhilePlaying();
 
     let previousRandomCell;
     let currentRandomCell;
@@ -84,7 +81,7 @@ export class GameSectionComponent implements OnInit, OnDestroy {
       while (
         !isCompleted &&
         this.computerScore < this.scoreThreshold &&
-        this.userScore < this.scoreThreshold
+        this.playerScore < this.scoreThreshold
       ) {
         currentRandomCell = this.cells[
           Math.floor(Math.random() * this.cells.length)
@@ -97,15 +94,14 @@ export class GameSectionComponent implements OnInit, OnDestroy {
             previousRandomCell.lost = true;
             this.computerScore++;
           } else if (previousRandomCell && previousRandomCell.won) {
-            this.userScore++;
+            this.playerScore++;
           }
           if (
-            this.scoreThreshold - this.userScore !== 0 &&
+            this.scoreThreshold - this.playerScore !== 0 &&
             this.scoreThreshold - this.computerScore !== 0
           ) {
             currentRandomCell.active = true;
           } else {
-            this._showMessageWhoHadWon();
           }
           previousRandomCell = currentRandomCell;
 
@@ -115,11 +111,36 @@ export class GameSectionComponent implements OnInit, OnDestroy {
     }, this.timeout);
   };
 
-  ngOnInit() {
+  ngOnDestroy() {
+    this._clearTimer();
+  }
+
+  private _resetGame() {
+    this._clearTimer();
+    this._resetScore();
+    this._calculateCellsQuantity();
+    this._calculateThreshold();
     this._createCleanCells();
   }
 
-  ngOnDestroy() {
-    this._clearTimer();
+  private _resetScore = () => {
+    this.computerScore = 0;
+    this.playerScore = 0;
+  };
+  private _resetMessage = () => (this.message = '');
+  private _clearTimer = () => clearInterval(this.timer);
+  private _calculateCellsQuantity() {
+    this.cellsQuantity = this.sideLength ** 2;
+  }
+  private _calculateThreshold() {
+    this.scoreThreshold = Math.ceil(this.cellsQuantity / 2);
+  }
+  private _createCleanCells = () =>
+    (this.cells = Array.from(
+      { length: this.cellsQuantity },
+      el => (el = this.cell())
+    ));
+  private _changeButtonCaptionAfterFirstClick() {
+    this.playButtonCaption = 'PLAY AGAIN';
   }
 }
