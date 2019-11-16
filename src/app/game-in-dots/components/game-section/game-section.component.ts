@@ -1,24 +1,35 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Input,
+  ChangeDetectorRef
+} from '@angular/core';
 import { ICell } from '../../../Models/cell';
+import { IGameMode } from '../../../Models/gameMode';
+
 @Component({
   selector: 'app-game-section',
   templateUrl: './game-section.component.html',
   styleUrls: ['./game-section.component.scss']
 })
 export class GameSectionComponent implements OnInit, OnDestroy {
+  @Input()
   cells: ICell[];
   sideLength = 5;
   cellsQuantity = this.sideLength ** 2;
-  timeOut = 600;
+  timeout = 600;
   timer;
   message = 'Press play to start the game';
   playButtonCaption = 'PLAY';
+  playerName: string;
 
   scoreThreshold = Math.ceil(this.cellsQuantity / 2);
 
   computerScore = 0;
   userScore = 0;
 
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
   cell: () => ICell = () => ({ active: false, won: false, lost: false });
 
   private _resetScore = () => {
@@ -46,6 +57,15 @@ export class GameSectionComponent implements OnInit, OnDestroy {
   private _changeButtonCaptionAfterFirstClick() {
     this.playButtonCaption = 'PLAY AGAIN';
   }
+
+  onNameChange = (e: string) => {
+    this.playerName = e;
+  };
+  onGameModeChange = (e: IGameMode) => {
+    this.timeout = e.delay;
+    this.sideLength = e.field;
+    this._createCleanCells();
+  };
 
   startGame = () => {
     this._resetMessage();
@@ -92,10 +112,8 @@ export class GameSectionComponent implements OnInit, OnDestroy {
           break;
         }
       }
-    }, this.timeOut);
+    }, this.timeout);
   };
-
-  constructor() {}
 
   ngOnInit() {
     this._createCleanCells();

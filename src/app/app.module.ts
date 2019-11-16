@@ -7,7 +7,7 @@ import { GameInDotsModule } from './game-in-dots/game-in-dots.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
