@@ -18,8 +18,16 @@ export class GameDataService {
       .pipe(map(res => new GameModesList(res)));
 
   public getLeaders = () =>
-    timer(0, 1500000).pipe(
+    timer(0, 1000).pipe(
       concatMap(_ => this.http.get(`${this.baseUrl}/winners`)),
-      map((leaders: Leader[]) => leaders.slice(0, 4).map(leader => new Leader(leader)))
+      map((leaders: Leader[]) =>
+        leaders
+          .reverse()
+          .slice(0, 4)
+          .map(leader => new Leader(leader))
+      )
     );
+
+  public postResult = (result: Leader) =>
+    this.http.post(`${this.baseUrl}/winners`, result);
 }

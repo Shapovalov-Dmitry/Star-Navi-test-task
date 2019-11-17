@@ -5,7 +5,7 @@ export class Leader {
   date: string;
   constructor(leader) {
     this.winner = leader.winner;
-    this.date = dayjs(leader.date.replace(';', ' ')).format('MMM DD, hh:mm');
+    this.date = dayjs(leader.date.replace(';', ' ')).format('MMM DD, H:mm');
     return this;
   }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ICell } from '../../../Models/cell';
 import { IGameMode } from '../../../Models/gameMode';
+import { GameDataService } from '../../game-data.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-game-section',
@@ -24,7 +26,7 @@ export class GameSectionComponent implements OnInit, OnDestroy {
 
   timer;
 
-  constructor() {}
+  constructor(private _gameDataService: GameDataService) {}
 
   ngOnInit() {
     this._resetGame();
@@ -68,6 +70,23 @@ export class GameSectionComponent implements OnInit, OnDestroy {
     this._resetGame();
   };
 
+  canPlay = () => !(this.playerName && this.timeout);
+
+  cornerCellsStyles = (row: number, column: number) => {
+    if (row === 0 && column === 0) {
+      return 'border-top-left-radius';
+    }
+    if (row === 0 && column === this.sideLength - 1) {
+      return 'border-top-right-radius';
+    }
+    if (row === this.sideLength - 1 && column === 0) {
+      return 'border-bottom-left-radius';
+    }
+    if (row === this.sideLength - 1 && column === this.sideLength - 1) {
+      return 'border-bottom-right-radius';
+    }
+  };
+
   startGame = () => {
     this._resetGame();
 
@@ -102,6 +121,7 @@ export class GameSectionComponent implements OnInit, OnDestroy {
           ) {
             currentRandomCell.active = true;
           } else {
+            this._postResult();
           }
           previousRandomCell = currentRandomCell;
 
@@ -111,25 +131,24 @@ export class GameSectionComponent implements OnInit, OnDestroy {
     }, this.timeout);
   };
 
-  canPlay = () => !(this.playerName && this.timeout);
-
-  cornerCellsStyles = (row, column) => {
-    if (row === 0 && column === 0) {
-      return 'border-top-left-radius';
-    }
-    if (row === 0 && column === this.sideLength - 1) {
-      return 'border-top-right-radius';
-    }
-    if (row === this.sideLength - 1 && column === 0) {
-      return 'border-bottom-left-radius';
-    }
-    if (row === this.sideLength - 1 && column === this.sideLength - 1) {
-      return 'border-bottom-right-radius';
-    }
-  };
-
   ngOnDestroy() {
     this._clearTimer();
+  }
+
+  private _postResult() {
+    let winner;
+    if (this.scoreThreshold - this.playerScore === 0) {
+      winner = this.playerName;
+    } else {
+      winner = 'Compukter';
+    }
+    console.log(dayjs(Date.now()).format('H:mm; DD MMMM YYYY'));
+    this._gameDataService
+      .postResult({
+        winner,
+        date: dayjs(Date.now()).format('H:mm; DD MMMM YYYY')
+      })
+      .subscribe();
   }
 
   private _resetGame() {
