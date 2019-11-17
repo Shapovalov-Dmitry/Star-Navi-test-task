@@ -1,9 +1,11 @@
+import dayjs from 'dayjs';
+
 export class Leader {
   winner: string;
-  date: Date;
+  date: string;
   constructor(leader) {
     this.winner = leader.winner;
-    this.date = leader.date;
+    this.date = dayjs(leader.date.replace(';', ' ')).format('MMM DD, hh:mm');
     return this;
   }
 }
