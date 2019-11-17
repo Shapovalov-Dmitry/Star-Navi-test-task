@@ -142,7 +142,6 @@ export class GameSectionComponent implements OnInit, OnDestroy {
     } else {
       winner = 'Compukter';
     }
-    console.log(dayjs(Date.now()).format('H:mm; DD MMMM YYYY'));
     this._gameDataService
       .postResult({
         winner,
