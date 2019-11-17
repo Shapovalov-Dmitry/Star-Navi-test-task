@@ -1,0 +1,42 @@
+.settings-bar {
+  display: flex;
+  justify-content: space-between;
+  & > *:not(:last-child) {
+    margin-right: 1em;
+  }
+}
+
+button, select, input {
+  border: none;
+  border-radius: 0.1em;
+  padding: 0 0.5em 0 0.5em;
+  height: 1.5em;
+  font-size: inherit;
+}
+
+button {
+  background-color: #8d8eb6;
+  white-space: nowrap;
+  color: white;
+  &:hover {
+    background-color: #5c5d81;
+  }
+}
+
+button:disabled {
+  background-color: #8d8eb656;
+}
+
+select, input {
+  background-color: #cfd8dc;
+  color: #575757;
+}
+
+input{
+  width: 10em;
+}
+
+input::placeholder {
+  color: #888;
+  flex-shrink: 1;
+}

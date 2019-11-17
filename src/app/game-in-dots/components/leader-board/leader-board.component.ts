@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GameDataService } from '../../game-data.service';
 import { Observable } from 'rxjs';
+import { Leader } from 'src/app/Models/leaders';
 
 @Component({
   selector: 'app-leader-board',
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeaderBoardComponent implements OnInit {
-  getLeaders$: Observable<any>;
+  getLeaders$: Observable<Leader[]>;
   constructor(public gameDataService: GameDataService) {
     this.getLeaders$ = gameDataService.getLeaders();
   }

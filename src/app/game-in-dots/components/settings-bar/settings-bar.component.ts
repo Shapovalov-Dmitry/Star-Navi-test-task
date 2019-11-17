@@ -18,6 +18,7 @@ import { Observable } from 'rxjs';
 export class SettingsBarComponent {
   @Input() startGame: () => void;
   @Input() playButtonCaption: string;
+  @Input() canPlay = false;
   @Output() playerName: EventEmitter<string> = new EventEmitter();
   @Output() gameMode: EventEmitter<IGameMode> = new EventEmitter();
 

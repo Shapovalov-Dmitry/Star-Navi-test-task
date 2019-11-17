@@ -111,6 +111,23 @@ export class GameSectionComponent implements OnInit, OnDestroy {
     }, this.timeout);
   };
 
+  canPlay = () => !(this.playerName && this.timeout);
+
+  cornerCellsStyles = (row, column) => {
+    if (row === 0 && column === 0) {
+      return 'border-top-left-radius';
+    }
+    if (row === 0 && column === this.sideLength - 1) {
+      return 'border-top-right-radius';
+    }
+    if (row === this.sideLength - 1 && column === 0) {
+      return 'border-bottom-left-radius';
+    }
+    if (row === this.sideLength - 1 && column === this.sideLength - 1) {
+      return 'border-bottom-right-radius';
+    }
+  };
+
   ngOnDestroy() {
     this._clearTimer();
   }
@@ -127,7 +144,6 @@ export class GameSectionComponent implements OnInit, OnDestroy {
     this.computerScore = 0;
     this.playerScore = 0;
   };
-  private _resetMessage = () => (this.message = '');
   private _clearTimer = () => clearInterval(this.timer);
   private _calculateCellsQuantity() {
     this.cellsQuantity = this.sideLength ** 2;

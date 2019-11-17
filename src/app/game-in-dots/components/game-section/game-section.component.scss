@@ -6,7 +6,24 @@ section {
   justify-content: center;
   flex-direction: column;
 }
+
 .row {
   display: flex;
   flex-direction: row;
+}
+
+.border-top-left-radius {
+  border-top-left-radius: 0.4em;
+}
+
+.border-top-right-radius {
+  border-top-right-radius: 0.4em;
+}
+
+.border-bottom-left-radius {
+  border-bottom-left-radius: 0.4em;
+}
+
+.border-bottom-right-radius {
+  border-bottom-right-radius: 0.4em;
 }

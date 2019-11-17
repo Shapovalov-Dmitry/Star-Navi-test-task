@@ -2,15 +2,17 @@
   <app-settings-bar
     [startGame]="startGame"
     [playButtonCaption]="playButtonCaption"
+    [canPlay]="canPlay()"
     (playerName)="onPlayerNameChange($event)"
     (gameMode)="onGameModeChange($event)"
   ></app-settings-bar>
-  <h2>{{ chooseMessage() && message}}</h2>
+  <h2>{{ chooseMessage() && message }}</h2>
   <div *ngIf="cells" class="game-field">
-    <div class="row" *ngFor="let row of cells | flatTo2D">
+    <div class="row" *ngFor="let row of cells | flatTo2D; index as rowId">
       <app-cell
         class="cell"
-        *ngFor="let cell of row"
+        *ngFor="let cell of row; index as colId"
+        [class]="cornerCellsStyles(rowId, colId)"
         [active]="cell.active"
         [lost]="cell.lost"
         [cell]="cell"

@@ -1,13 +1,13 @@
 <section>
   <h1>Leader board</h1>
 
-  <ul *ngIf="getLeaders$ | async">
-    <li *ngFor="let item of [1, 2, 3, 4]">
+  <ul *ngIf="getLeaders$ | async as leaders">
+    <li *ngFor="let leader of leaders">
       <p>
-        {{ item }}
+        {{ leader.winner }}
       </p>
       <p>
-        {{ item }}
+        {{ leader.date }}
       </p>
     </li>
   </ul>

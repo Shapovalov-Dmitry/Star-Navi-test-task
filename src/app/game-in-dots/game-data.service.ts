@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap, throttle, repeat, concatMap } from 'rxjs/operators';
+import { map, concatMap } from 'rxjs/operators';
 import { GameModesList } from '../Models/gameMode';
 import { timer } from 'rxjs';
+import { Leader } from '../Models/leaders';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +18,8 @@ export class GameDataService {
       .pipe(map(res => new GameModesList(res)));
 
   public getLeaders = () =>
-    timer(0, 15000).pipe(
-      concatMap(_ =>
-        this.http.get(`${this.baseUrl}/winners`).pipe(tap(e => console.log(e)))
-      )
+    timer(0, 1500000).pipe(
+      concatMap(_ => this.http.get(`${this.baseUrl}/winners`)),
+      map((leaders: Leader[]) => leaders.slice(0, 4).map(leader => new Leader(leader)))
     );
 }

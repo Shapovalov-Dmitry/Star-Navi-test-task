@@ -1,27 +1,31 @@
 .game-wrapper {
   display: flex;
+  min-width: 44em;
   min-width: fit-content;
   min-height: 100%;
+  color: #888;
+  font-size: 1.4em;
   align-items: center;
   justify-content: center;
 
-  @media (max-width: 900px) {
+  @media (max-width: 73.5em) {
     align-items: initial;
-    flex-direction: column;
     justify-content: initial;
+    flex-direction: column;
   }
 }
 
 app-leader-board {
-  flex: 1;
+  margin-left: 1em;
+  flex: 2;
 }
 
 app-game-section {
-  padding: 1em;
   border-right: 1px solid rgba(0, 0, 0, 0.151);
-  flex: 2;
+  padding: 1em;
+  flex: 3;
 
-  @media (max-width: 900px) {
+  @media (max-width: 73.5em) {
     border-right: none;
     border-bottom: 1px solid rgba(0, 0, 0, 0.151);
   }

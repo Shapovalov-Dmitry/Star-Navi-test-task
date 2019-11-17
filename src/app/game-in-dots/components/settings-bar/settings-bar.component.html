@@ -1,16 +1,14 @@
 <div class="settings-bar">
   <select
     name="Game modes"
-    *ngIf="gameModes$ | async as dataModes"
+    *ngIf="gameModes$ | async as gameModes"
     (change)="onSelectGameMode($event)"
   >
-    <option style="display:none"
-      >Pick game mode</option
-    >
+    <option value="placeholder" style="display:none">Pick game mode</option>
     <option
-      *ngFor="let dataMode of dataModes | keyvalue: sortNull"
-      [value]="dataMode.value | json"
-      >{{ dataMode.key | normalcase }}</option
+      *ngFor="let gameMode of gameModes | keyvalue: sortNull"
+      [value]="gameMode.value | json"
+      >{{ gameMode.key | normalcase }}</option
     >
   </select>
   <input
@@ -18,5 +16,7 @@
     placeholder="Enter your name"
     (keyup)="onPlayerNameChange($event)"
   />
-  <button (click)="startGame()">{{ playButtonCaption }}</button>
+  <button [disabled]="canPlay" (click)="startGame()">
+    {{ playButtonCaption }}
+  </button>
 </div>
