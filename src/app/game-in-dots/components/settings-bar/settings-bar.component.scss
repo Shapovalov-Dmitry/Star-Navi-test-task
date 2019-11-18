@@ -12,6 +12,9 @@ button, select, input {
   padding: 0 0.5em 0 0.5em;
   height: 1.5em;
   font-size: inherit;
+  &:hover{
+    cursor: pointer
+  }
 }
 
 button {
@@ -25,6 +28,7 @@ button {
 
 button:disabled {
   background-color: #8d8eb656;
+  cursor: default;
 }
 
 select, input {
